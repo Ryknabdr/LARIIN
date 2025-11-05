@@ -45,6 +45,7 @@ class BerandaTab extends StatelessWidget {
                     const SizedBox(height: 8),
                     Text(
                       'Pantau nutrisi dan aktivitas Anda dengan AI',
+                      // ignore: deprecated_member_use
                       style: TextStyle(fontSize: 16, color: Colors.white.withOpacity(0.9)),
                     ),
                   ],
@@ -86,6 +87,7 @@ class BerandaTab extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                   boxShadow: [
                     BoxShadow(
+                      // ignore: deprecated_member_use
                       color: Colors.grey.withOpacity(0.1),
                       spreadRadius: 1,
                       blurRadius: 5,
@@ -101,6 +103,7 @@ class BerandaTab extends StatelessWidget {
                         Container(
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
+                            // ignore: deprecated_member_use
                             color: Colors.purple.withOpacity(0.1),
                             borderRadius: BorderRadius.circular(8),
                           ),
@@ -157,6 +160,7 @@ class BerandaTab extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                   boxShadow: [
                     BoxShadow(
+                      // ignore: deprecated_member_use
                       color: Colors.grey.withOpacity(0.1),
                       spreadRadius: 1,
                       blurRadius: 5,
@@ -172,6 +176,7 @@ class BerandaTab extends StatelessWidget {
                         Container(
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
+                            // ignore: deprecated_member_use
                             color: Colors.green.withOpacity(0.1),
                             borderRadius: BorderRadius.circular(8),
                           ),

@@ -140,32 +140,50 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _pages[_selectedIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Beranda',
+      bottomNavigationBar: BottomAppBar(
+        shape: const CircularNotchedRectangle(),
+        notchMargin: 8.0,
+        child: SizedBox(
+          height: 64,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              IconButton(
+                icon: const Icon(Icons.home),
+                color: _selectedIndex == 0 ? Colors.lightBlue : Colors.grey,
+                onPressed: () => _onItemTapped(0),
+              ),
+              IconButton(
+                icon: const Icon(Icons.directions_run),
+                color: _selectedIndex == 1 ? Colors.lightBlue : Colors.grey,
+                onPressed: () => _onItemTapped(1),
+              ),
+              const SizedBox(width: 48), // area buat FAB
+              IconButton(
+                icon: const Icon(Icons.chat),
+                color: _selectedIndex == 3 ? Colors.lightBlue : Colors.grey,
+                onPressed: () => _onItemTapped(3),
+              ),
+              IconButton(
+                icon: const Icon(Icons.person),
+                color: _selectedIndex == 4 ? Colors.lightBlue : Colors.grey,
+                onPressed: () => _onItemTapped(4),
+              ),
+            ],
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.directions_run),
-            label: 'Pelacakan Lari',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.camera_alt),
-            label: 'Scan Makanan',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.chat),
-            label: 'Chatbot Gizi',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profil',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.lightBlue,
-        onTap: _onItemTapped,
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: SizedBox(
+        width: 72,
+        height: 72,
+        child: FloatingActionButton(
+          backgroundColor: Colors.blueAccent,
+          elevation: 8,
+          shape: const CircleBorder(),
+          onPressed: () => _onItemTapped(2),
+          child: const Icon(Icons.camera_alt, size: 40),
+        ),
       ),
     );
   }
