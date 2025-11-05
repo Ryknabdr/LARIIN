@@ -1,9 +1,9 @@
 # Instalasi awal
 Supaya semua package otomatis dikenali & error merah hilang, setiap pertama kali buka project Flutter:
-_Install semua dependency sesuai pubspec.yaml dengan:
+1. Install semua dependency sesuai pubspec.yaml dengan:
    flutter pub get
 (Buka terminal dari folder utama project Flutter, jalankan perintah di atas)
-JANGAN lupa:
+2. JANGAN lupa:
 Kalau kamu tambah package di pubspec.yaml, habis itu harus run flutter pub get lagi.
 Package yang paling sering WAJIB di-install di Flutter (buat aplikasi modern):
 Flutter SDK (otomatis bila dev setup sudah benar)
@@ -14,8 +14,8 @@ google_ml_kit dan varian google_mlkit_...
 location (untuk akses lokasi)
 provider atau get (untuk state management - kalau dipakai)
 Semua package yang tampil di bagian dependencies: di pubspec.yaml milik project kamu
-Cek cepat dependencies yang belum ter-install:
-Jalankan:
+**Cek cepat dependencies yang belum ter-install:**
+1. Jalankan:
   flutter pub outdated
 Ini menunjukkan mana yang outdated atau belum update, tapi intinya semua package wajib di-install dengan flutter pub get.
 Bonus:
