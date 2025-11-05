@@ -1,60 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:google_ml_kit/google_ml_kit.dart';
-import 'dart:io';
 
-class BerandaTab extends StatefulWidget {
+class BerandaTab extends StatelessWidget {
   const BerandaTab({super.key});
-
-  @override
-  State<BerandaTab> createState() => _BerandaTabState();
-}
-
-class _BerandaTabState extends State<BerandaTab> {
-  File? _image;
-  String _result = '';
-  bool _isLoading = false;
-
-  Future<void> _pickImage(ImageSource source) async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: source);
-
-    if (pickedFile != null) {
-      setState(() {
-        _image = File(pickedFile.path);
-        _result = '';
-      });
-      _analyzeImage();
-    }
-  }
-
-  Future<void> _analyzeImage() async {
-    if (_image == null) return;
-
-    setState(() => _isLoading = true);
-
-    final inputImage = InputImage.fromFile(_image!);
-    final imageLabeler = GoogleMlKit.vision.imageLabeler();
-
-    try {
-      final labels = await imageLabeler.processImage(inputImage);
-      String foodLabels = labels
-          .where((label) => label.confidence > 0.5) // Filter confidence > 50%
-          .map((label) => '${label.label} (${(label.confidence * 100).toStringAsFixed(1)}%)')
-          .join(', ');
-
-      setState(() {
-        _result = foodLabels.isNotEmpty ? 'Makanan terdeteksi: $foodLabels' : 'Tidak ada makanan terdeteksi';
-      });
-    } catch (e) {
-      setState(() {
-        _result = 'Error: ${e.toString()}';
-      });
-    }
-
-    imageLabeler.close();
-    setState(() => _isLoading = false);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +11,9 @@ class _BerandaTabState extends State<BerandaTab> {
         actions: [
           IconButton(
             icon: const Icon(Icons.notifications_outlined),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(context, '/notifikasi');
+            },
           ),
         ],
       ),
@@ -200,169 +149,88 @@ class _BerandaTabState extends State<BerandaTab> {
               ),
               const SizedBox(height: 20),
 
-              // // AI Scan Makanan Section with Navbar
-              // Container(
-              //   padding: const EdgeInsets.all(16),
-              //   decoration: BoxDecoration(
-              //     color: Colors.white,
-              //     borderRadius: BorderRadius.circular(12),
-              //     boxShadow: [
-              //       BoxShadow(
-              //         color: Colors.grey.withOpacity(0.1),
-              //         spreadRadius: 1,
-              //         blurRadius: 5,
-              //         offset: const Offset(0, 2),
-              //       ),
-              //     ],
-              //   ),
-              //   child: Column(
-              //     crossAxisAlignment: CrossAxisAlignment.start,
-              //     children: [
-              //       Row(
-              //         children: [
-              //           Container(
-              //             padding: const EdgeInsets.all(8),
-              //             decoration: BoxDecoration(
-              //               color: Colors.blue.withOpacity(0.1),
-              //               borderRadius: BorderRadius.circular(8),
-              //             ),
-              //             child: const Icon(Icons.restaurant, color: Colors.blue),
-              //           ),
-              //           const SizedBox(width: 12),
-              //           const Expanded(
-              //             child: Text(
-              //               'AI Scan Makanan',
-              //               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              //             ),
-              //           ),
-              //         ],
-              //       ),
-              //       const SizedBox(height: 10),
-              //       const Text(
-              //         'Scan makanan untuk analisis nutrisi instan',
-              //         style: TextStyle(color: Colors.grey, fontSize: 14),
-              //       ),
-              //       const SizedBox(height: 15),
-
-              //       // Scan Container inside card
-              //       Container(
-              //         height: 150,
-              //         width: double.infinity,
-              //         decoration: BoxDecoration(
-              //           border: Border.all(color: Colors.blue.withOpacity(0.3), width: 2),
-              //           borderRadius: BorderRadius.circular(12),
-              //           color: Colors.blue[50],
-              //         ),
-              //         child: _image != null
-              //             ? ClipRRect(
-              //                 borderRadius: BorderRadius.circular(10),
-              //                 child: Image.file(_image!, fit: BoxFit.cover),
-              //               )
-              //             : Column(
-              //                 mainAxisAlignment: MainAxisAlignment.center,
-              //                 children: [
-              //                   Icon(Icons.camera_alt, size: 50, color: Colors.blue.withOpacity(0.7)),
-              //                   const SizedBox(height: 8),
-              //                   const Text(
-              //                     'Tap untuk scan',
-              //                     style: TextStyle(color: Colors.blue, fontSize: 14),
-              //                   ),
-              //                 ],
-              //               ),
-              //       ),
-              //       const SizedBox(height: 15),
-
-              //       // Action Buttons inside card
-              //       Row(
-              //         children: [
-              //           Expanded(
-              //             child: ElevatedButton.icon(
-              //               onPressed: () => _pickImage(ImageSource.camera),
-              //               icon: const Icon(Icons.camera, size: 18),
-              //               label: const Text('Kamera', style: TextStyle(fontSize: 14)),
-              //               style: ElevatedButton.styleFrom(
-              //                 backgroundColor: Colors.blue,
-              //                 foregroundColor: Colors.white,
-              //                 padding: const EdgeInsets.symmetric(vertical: 10),
-              //                 shape: RoundedRectangleBorder(
-              //                   borderRadius: BorderRadius.circular(8),
-              //                 ),
-              //               ),
-              //             ),
-              //           ),
-              //           const SizedBox(width: 8),
-              //           Expanded(
-              //             child: ElevatedButton.icon(
-              //               onPressed: () => _pickImage(ImageSource.gallery),
-              //               icon: const Icon(Icons.photo, size: 18),
-              //               label: const Text('Galeri', style: TextStyle(fontSize: 14)),
-              //               style: ElevatedButton.styleFrom(
-              //                 backgroundColor: Colors.white,
-              //                 foregroundColor: Colors.blue,
-              //                 side: const BorderSide(color: Colors.blue),
-              //                 padding: const EdgeInsets.symmetric(vertical: 10),
-              //                 shape: RoundedRectangleBorder(
-              //                   borderRadius: BorderRadius.circular(8),
-              //                 ),
-              //               ),
-              //             ),
-              //           ),
-              //         ],
-              //       ),
-              //     ],
-              //   ),
-              // ),
-              // const SizedBox(height: 20),
-
-              // // Analysis Result (moved outside the card)
-              // if (_isLoading)
-              //   Container(
-              //     padding: const EdgeInsets.all(20),
-              //     decoration: BoxDecoration(
-              //       color: Colors.blue[50],
-              //       borderRadius: BorderRadius.circular(12),
-              //     ),
-              //     child: const Row(
-              //       children: [
-              //         CircularProgressIndicator(),
-              //         SizedBox(width: 15),
-              //         Expanded(
-              //           child: Text(
-              //             'Menganalisis gambar dengan AI...',
-              //             style: TextStyle(color: Colors.blue, fontWeight: FontWeight.w500),
-              //           ),
-              //         ),
-              //       ],
-              //     ),
-              //   )
-              // else if (_result.isNotEmpty)
-              //   Container(
-              //     padding: const EdgeInsets.all(20),
-              //     decoration: BoxDecoration(
-              //       color: Colors.green[50],
-              //       borderRadius: BorderRadius.circular(12),
-              //       border: Border.all(color: Colors.green, width: 1),
-              //     ),
-              //     child: Column(
-              //       children: [
-              //         Row(
-              //           children: [
-              //             const Icon(Icons.restaurant, color: Colors.green, size: 30),
-              //             const SizedBox(width: 10),
-              //             const Text(
-              //               'Hasil Analisis',
-              //               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.green),
-              //             ),
-              //           ],
-              //         ),
-              //         const SizedBox(height: 10),
-              //         Text(
-              //           _result,
-              //           style: const TextStyle(fontSize: 16, color: Colors.black87),
-              //         ),
-              //       ],
-              //     ),
-              //   ),
+              // Nutrition Tips Section
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.1),
+                      spreadRadius: 1,
+                      blurRadius: 5,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: Colors.green.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: const Icon(Icons.restaurant_menu, color: Colors.green),
+                        ),
+                        const SizedBox(width: 12),
+                        const Expanded(
+                          child: Text(
+                            'Tips Nutrisi Hari Ini',
+                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 15),
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.green[50],
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.green.withOpacity(0.3), width: 1),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              const Icon(Icons.lightbulb, color: Colors.green, size: 24),
+                              const SizedBox(width: 8),
+                              const Text(
+                                'Tips Hari Ini',
+                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.green),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 12),
+                          const Text(
+                            'Konsumsi protein seimbang setiap hari untuk menjaga massa otot dan energi. Sumber protein baik termasuk ayam, ikan, telur, kacang-kacangan, dan produk susu rendah lemak.',
+                            style: TextStyle(fontSize: 14, color: Colors.black87, height: 1.5),
+                          ),
+                          const SizedBox(height: 12),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                            decoration: BoxDecoration(
+                              color: Colors.green,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: const Text(
+                              'Protein: 15-20% dari total kalori harian',
+                              style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
 
               // Recent Activity
               const Text(
@@ -371,8 +239,8 @@ class _BerandaTabState extends State<BerandaTab> {
               ),
               const SizedBox(height: 10),
               _buildActivityItem('Lari pagi', '2.5 km • 25 menit', Icons.directions_run, Colors.orange),
-              _buildActivityItem('Scan sarapan', 'Oatmeal & Buah', Icons.restaurant, Colors.green),
               _buildActivityItem('Workout', 'Push-up & Squat', Icons.fitness_center, Colors.blue),
+              _buildActivityItem('Makan siang sehat', 'Salad & Ayam', Icons.restaurant, Colors.green),
             ],
           ),
         ),
