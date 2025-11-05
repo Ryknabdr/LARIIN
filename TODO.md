@@ -1,0 +1,4 @@
+- [x] Update pubspec.yaml to add image_picker and google_ml_kit dependencies
+- [x] Edit lib/pages/beranda.dart to change to StatefulWidget and implement the new UI with AI food scanning
+- [x] Run flutter pub get to install new dependencies
+- [ ] Test the app to ensure the new home screen works correctly
