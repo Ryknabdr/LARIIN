@@ -8,7 +8,7 @@ class NotifikasiPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Notifikasi'),
-        backgroundColor: const Color(0xFF00B4D8),
+        backgroundColor: const Color.fromARGB(255, 18, 106, 179),
         foregroundColor: Colors.white,
       ),
       body: ListView(

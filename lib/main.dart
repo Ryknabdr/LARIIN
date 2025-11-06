@@ -139,6 +139,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: _pages[_selectedIndex],
       bottomNavigationBar: BottomAppBar(
         shape: const CircularNotchedRectangle(),
