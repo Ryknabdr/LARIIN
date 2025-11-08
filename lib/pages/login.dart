@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -15,26 +17,67 @@ class _LoginPageState extends State<LoginPage> {
   bool _isLoading = false;
 
   void _login() async {
-    if (_formKey.currentState!.validate()) {
-      setState(() {
-        _isLoading = true;
-      });
+  if (_formKey.currentState!.validate()) {
+    setState(() {
+      _isLoading = true;
+    });
 
-      // Simulate login process
-      await Future.delayed(const Duration(seconds: 2));
+    final email = _emailController.text;
+    final password = _passwordController.text;
 
-      // For demo purposes, accept any email/password
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setBool('isLoggedIn', true);
-      await prefs.setString('userEmail', _emailController.text);
+    try {
+      final response = await http.post(
+        Uri.parse('http://192.168.1.14:5000/login'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'email': email, 'password': password}),
+      );
 
+      print("Response status: ${response.statusCode}");
+      print("Response body: ${response.body}");
+
+      if (response.statusCode == 200) {
+        try {
+          final result = jsonDecode(response.body);
+
+          if (result['status'] == 'success') {
+            final prefs = await SharedPreferences.getInstance();
+            await prefs.setBool('isLoggedIn', true);
+            await prefs.setString('userEmail', result['data']['email']);
+            await prefs.setString('userName', result['data']['username']); // ⬅ ubah sesuai kolom di DB
+
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Login berhasil!')),
+            );
+
+            Navigator.pushReplacementNamed(context, '/home');
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(result['message'] ?? 'Login gagal')),
+            );
+          }
+        } catch (e) {
+          print("Error decoding JSON: $e");
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Respon server tidak valid')),
+          );
+        }
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Email atau passwoed salah (${response.statusCode})')),
+        );
+      }
+    } catch (e) {
+      print("Error: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Terjadi kesalahan koneksi: $e')),
+      );
+    } finally {
       setState(() {
         _isLoading = false;
       });
-
-      Navigator.pushReplacementNamed(context, '/home');
     }
   }
+}
 
   @override
   Widget build(BuildContext context) {
