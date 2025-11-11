@@ -9,15 +9,27 @@ class ChatbotGiziTab extends StatefulWidget {
 
 class _ChatbotGiziTabState extends State<ChatbotGiziTab> {
   final TextEditingController _messageController = TextEditingController();
+
   final List<Map<String, String>> _messages = [
-    {'sender': 'bot', 'message': 'Halo! Saya adalah chatbot gizi Lariin. Saya bisa membantu Anda dengan pertanyaan tentang nutrisi, diet, dan kesehatan. Apa yang bisa saya bantu hari ini?'},
+    {
+      'sender': 'bot',
+      'message':
+          'Halo! Saya adalah chatbot gizi Lariin. Saya bisa membantu Anda dengan pertanyaan tentang nutrisi, diet, dan kesehatan. Apa yang bisa saya bantu hari ini?',
+    },
   ];
 
   void _sendMessage() {
     if (_messageController.text.trim().isNotEmpty) {
       setState(() {
-        _messages.add({'sender': 'user', 'message': _messageController.text.trim()});
-        _messages.add({'sender': 'bot', 'message': 'Terima kasih atas pertanyaannya! Saya sedang memproses jawaban yang tepat untuk Anda. Fitur integrasi LLM akan segera hadir untuk memberikan respons yang lebih cerdas.'});
+        _messages.add({
+          'sender': 'user',
+          'message': _messageController.text.trim(),
+        });
+        _messages.add({
+          'sender': 'bot',
+          'message':
+              'Terima kasih atas pertanyaannya! Saya sedang memproses jawaban yang tepat untuk Anda. Fitur integrasi AI akan segera hadir untuk memberikan respons yang lebih cerdas.',
+        });
       });
       _messageController.clear();
     }
@@ -27,13 +39,21 @@ class _ChatbotGiziTabState extends State<ChatbotGiziTab> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Chatbot Gizi'),
+        title: const Text(
+          'Chatbot Gizi',
+          style: TextStyle(
+            color: Color(0xFF1E3A8A),
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.help_outline),
+            icon: const Icon(Icons.settings_outlined, color: Color(0xFF1E3A8A)),
             onPressed: () {},
           ),
         ],
+        backgroundColor: Colors.white,
+        elevation: 1,
       ),
       body: Column(
         children: [
@@ -45,7 +65,9 @@ class _ChatbotGiziTabState extends State<ChatbotGiziTab> {
                 final message = _messages[index];
                 final isUser = message['sender'] == 'user';
                 return Align(
-                  alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
+                  alignment: isUser
+                      ? Alignment.centerRight
+                      : Alignment.centerLeft,
                   child: Container(
                     margin: const EdgeInsets.symmetric(vertical: 4),
                     padding: const EdgeInsets.all(12),
@@ -53,18 +75,25 @@ class _ChatbotGiziTabState extends State<ChatbotGiziTab> {
                       maxWidth: MediaQuery.of(context).size.width * 0.75,
                     ),
                     decoration: BoxDecoration(
-                      color: isUser ? const Color(0xFF0077BE) : Colors.grey[200],
+                      color: isUser
+                          ? const Color(0xFF0077BE)
+                          : Colors.grey[200],
                       borderRadius: BorderRadius.only(
                         topLeft: const Radius.circular(16),
                         topRight: const Radius.circular(16),
-                        bottomLeft: isUser ? const Radius.circular(16) : const Radius.circular(4),
-                        bottomRight: isUser ? const Radius.circular(4) : const Radius.circular(16),
+                        bottomLeft: isUser
+                            ? const Radius.circular(16)
+                            : const Radius.circular(4),
+                        bottomRight: isUser
+                            ? const Radius.circular(4)
+                            : const Radius.circular(16),
                       ),
                     ),
                     child: Text(
                       message['message']!,
                       style: TextStyle(
-                        color: isUser ? Colors.white : Colors.black87,
+                        color:
+                            isUser ? Colors.white : Colors.black87,
                         fontSize: 14,
                       ),
                     ),
@@ -77,7 +106,9 @@ class _ChatbotGiziTabState extends State<ChatbotGiziTab> {
             padding: const EdgeInsets.all(16.0),
             decoration: BoxDecoration(
               color: Colors.white,
-              border: Border(top: BorderSide(color: Colors.grey[300]!)),
+              border: Border(
+                top: BorderSide(color: Colors.grey[300]!),
+              ),
             ),
             child: Row(
               children: [
@@ -92,7 +123,8 @@ class _ChatbotGiziTabState extends State<ChatbotGiziTab> {
                       ),
                       filled: true,
                       fillColor: Colors.grey[100],
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      contentPadding:
+                          const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                     ),
                     onSubmitted: (_) => _sendMessage(),
                   ),

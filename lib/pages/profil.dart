@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -15,152 +16,187 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    // Default values for demo
     _nameController.text = 'Pengguna Demo';
     _emailController.text = 'demo@example.com';
   }
 
-  void _updateProfile() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Profil berhasil diperbarui')),
-    );
-  }
-
   void _logout() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('isLoggedIn', false);
-    await prefs.remove('userEmail');
-    await prefs.remove('userName');
+    await prefs.clear();
 
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Logout berhasil')),
     );
-    // Navigate back to login screen
+
     Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
   }
 
+
+
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(vertical: 40),
-            decoration: const BoxDecoration(
-              color: Colors.blue,
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(30),
-                bottomRight: Radius.circular(30),
+    return Scaffold(
+      backgroundColor: const Color(0xFFF2F6FA),
+      body: SafeArea(
+        child: Column(
+          children: [
+            // Header Section
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Color(0xFF1E3A8A), Color(0xFF2563EB)],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(30),
+                  bottomRight: Radius.circular(30),
+                ),
+              ),
+              child: Column(
+                children: [
+                  const CircleAvatar(
+                    radius: 55,
+                    backgroundColor: Colors.white,
+                    child: Icon(Icons.person, size: 60, color: Color(0xFF1E3A8A)),
+                  ),
+                  const SizedBox(height: 14),
+                  Text(
+                    _nameController.text,
+                    style: GoogleFonts.poppins(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    _emailController.text,
+                    style: GoogleFonts.poppins(
+                      fontSize: 15,
+                      color: Colors.white70,
+                    ),
+                  ),
+                ],
               ),
             ),
-            child: Column(
-              children: [
-                const CircleAvatar(
-                  radius: 60,
-                  backgroundColor: Colors.white,
-                  child: Icon(Icons.person, size: 60, color: Colors.blue),
+
+            const SizedBox(height: 30),
+
+            // Menu Card Section
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    _menuCard(
+                      icon: Icons.settings,
+                      title: 'Kelola Profil',
+                      color: const Color(0xFF2563EB),
+                      onTap: () => Navigator.pushNamed(context, '/manage-profile'),
+                    ),
+                    _menuCard(
+                      icon: Icons.directions_run,
+                      title: 'Riwayat Lari',
+                      color: const Color(0xFF00B4D8),
+                      onTap: () => Navigator.pushNamed(context, '/aktivitas'),
+                    ),
+                    _menuCard(
+                      icon: Icons.event,
+                      title: 'Event Lari',
+                      color: const Color(0xFFFF6B35),
+                      onTap: () => Navigator.pushNamed(context, '/event'),
+                    ),
+                    _menuCard(
+                      icon: Icons.feedback,
+                      title: 'Feedback',
+                      color: const Color(0xFF00B4D8),
+                      onTap: () => Navigator.pushNamed(context, '/feedback'),
+                    ),
+                    const Spacer(),
+                    _logoutButton(),
+                    const SizedBox(height: 20),
+                  ],
                 ),
-                const SizedBox(height: 16),
-                Text(
-                  _nameController.text,
-                  style: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  _emailController.text,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    color: Colors.white70,
-                  ),
-                ),
-              ],
+              ),
             ),
-          ),
-          const SizedBox(height: 20),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
-              children: [
-                Card(
-                  elevation: 4,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      children: [
-                        TextField(
-                          controller: _nameController,
-                          decoration: const InputDecoration(
-                            labelText: 'Nama Lengkap',
-                            prefixIcon: Icon(Icons.person_outline),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(10)),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        TextField(
-                          controller: _emailController,
-                          decoration: const InputDecoration(
-                            labelText: 'Email',
-                            prefixIcon: Icon(Icons.email_outlined),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(10)),
-                            ),
-                          ),
-                          keyboardType: TextInputType.emailAddress,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 24),
-                SizedBox(
-                  width: double.infinity,
-                  height: 50,
-                  child: ElevatedButton(
-                    onPressed: _updateProfile,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                    ),
-                    child: const Text(
-                      'Perbarui Profil',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                SizedBox(
-                  width: double.infinity,
-                  height: 50,
-                  child: ElevatedButton(
-                    onPressed: _logout,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                    ),
-                    child: const Text(
-                      'Logout',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ),
-              ],
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _menuCard({
+    required IconData icon,
+    required String title,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 16),
+        padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 20),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(18),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.15),
+              blurRadius: 10,
+              offset: const Offset(0, 6),
             ),
-          ),
-        ],
+          ],
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: color.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(icon, color: color, size: 26),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Text(
+                title,
+                style: GoogleFonts.poppins(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black87,
+                ),
+              ),
+            ),
+            const Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 18),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _logoutButton() {
+    return ElevatedButton.icon(
+      onPressed: _logout,
+      icon: const Icon(Icons.logout),
+      label: Text(
+        'Logout',
+        style: GoogleFonts.poppins(
+          fontSize: 16,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.redAccent,
+        foregroundColor: Colors.white,
+        minimumSize: const Size(double.infinity, 55),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
       ),
     );
   }

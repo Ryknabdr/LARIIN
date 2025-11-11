@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+import 'event_page.dart';
+import '../main.dart';
 
 class BerandaTab extends StatelessWidget {
-  const BerandaTab({super.key});
+  final Function(int)? onTabSwitch;
+
+  const BerandaTab({super.key, this.onTabSwitch});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Scaffold tetap di sini agar tidak ganggu layout lain
       resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: SingleChildScrollView(
@@ -15,112 +20,46 @@ class BerandaTab extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // AppBar manual (karena kita hapus Scaffold global)
+                // Header
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
-                      'Lariin',
-                      style: TextStyle(
-                        fontSize: 22,
+                    Text(
+                      'Selamat Datang, Abdul 👋',
+                      style: GoogleFonts.poppins(
+                        fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        color: Colors.blue,
+                        color: const Color(0xFF1E3A8A),
                       ),
                     ),
                     IconButton(
-                      icon: const Icon(Icons.notifications_outlined),
+                      icon: const Icon(Icons.notifications_outlined, color: Color(0xFF1E3A8A)),
                       onPressed: () {
                         Navigator.pushNamed(context, '/notifikasi');
                       },
                     ),
                   ],
                 ),
-                const SizedBox(height: 10),
-
-                // Welcome Section
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(30),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [Colors.blue, Colors.blue.shade700],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Selamat Datang!',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'Pantau nutrisi dan aktivitas Anda dengan AI',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.white.withOpacity(0.9),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
                 const SizedBox(height: 20),
 
-                // Quick Stats
-                Row(
-                  children: [
-                    Expanded(
-                      child: _buildStatCard(
-                        'Kalori Hari Ini',
-                        '1,250',
-                        'kcal',
-                        Icons.local_fire_department,
-                        Colors.orange,
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: _buildStatCard(
-                        'Langkah',
-                        '8,450',
-                        'steps',
-                        Icons.directions_walk,
-                        Colors.green,
-                      ),
-                    ),
-                  ],
-                ),
+                // Weekly Stats
+                _buildWeeklyStats(),
                 const SizedBox(height: 20),
 
-                // Tantangan Minggu Ini
-                _buildChallengeSection(),
-
+                  // Event Slider
+                _buildEventSlider(context),
                 const SizedBox(height: 20),
 
-                // Tips Nutrisi
-                _buildNutritionSection(),
-
+                // AI Recommendations
+                _buildAIRecommendations(context),
                 const SizedBox(height: 20),
 
-                // Aktivitas Terbaru
-                const Text(
-                  'Aktivitas Terbaru',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 10),
-                _buildActivityItem('Lari pagi', '2.5 km • 25 menit',
-                    Icons.directions_run, Colors.orange),
-                _buildActivityItem(
-                    'Workout', 'Push-up & Squat', Icons.fitness_center, Colors.blue),
-                _buildActivityItem('Makan siang sehat', 'Salad & Ayam',
-                    Icons.restaurant, Colors.green),
+                 // Recent Activities
+                _buildRecentActivities(context),
+                const SizedBox(height: 20),
+
+                // Motivational Quote
+                _buildMotivationalQuote(),
               ],
             ),
           ),
@@ -130,150 +69,384 @@ class BerandaTab extends StatelessWidget {
   }
 
   // ======== COMPONENTS =========
-  Widget _buildStatCard(
-    String title,
-    String value,
-    String unit,
-    IconData icon,
-    Color color,
-  ) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            spreadRadius: 1,
-            blurRadius: 5,
-            offset: const Offset(0, 2),
+  Widget _buildEventSlider(BuildContext context) {
+    final List<Map<String, String>> events = [
+      {
+        'title': 'Jakarta Run 10K',
+        'date': '24 Nov 2025',
+        'location': 'Jakarta',
+        'distance': '10K',
+        'image': 'assets/images/pancalrun.jpeg',
+      },
+      {
+        'title': 'Morning Run Challenge',
+        'date': '15 Dec 2025',
+        'location': 'Bandung',
+        'distance': '5K',
+        'image': 'assets/images/railfuns.jpeg',
+      },
+      {
+        'title': 'Virtual Run – Beat Your Record',
+        'date': '1 Jan 2026',
+        'location': 'Online',
+        'distance': '10K',
+        'image': 'assets/images/pancalrun.jpeg',
+      },
+    ];
+
+    return Column(
+      children: [
+        CarouselSlider(
+          options: CarouselOptions(
+            height: 200,
+            autoPlay: true,
+            enlargeCenterPage: true,
+            viewportFraction: 0.9,
           ),
-        ],
-      ),
-      child: Column(
-        children: [
-          Icon(icon, color: color, size: 30),
-          const SizedBox(height: 8),
-          Text(
-            value,
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          items: events.map((event) {
+            return Container(
+              width: double.infinity,
+              margin: const EdgeInsets.symmetric(horizontal: 5.0),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.1),
+                    spreadRadius: 1,
+                    blurRadius: 5,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ClipRRect(
+                    borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+                    child: Image.asset(
+                      event['image']!,
+                      height: 130,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Container(
+                          height: 120,
+                          color: Colors.grey[300],
+                          child: const Center(
+                            child: Icon(
+                              Icons.image_not_supported,
+                              size: 40,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          event['title']!,
+                          style: GoogleFonts.poppins(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: const Color(0xFF1E3A8A),
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          '${event['date']} • ${event['location']}',
+                          style: GoogleFonts.poppins(
+                            fontSize: 12,
+                            color: Colors.grey[600],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }).toList(),
+        ),
+        const SizedBox(height: 10),
+        TextButton(
+          onPressed: () {
+            Navigator.of(context, rootNavigator: true).pushNamed('/event');
+          },
+          child: Text(
+            'Lihat Selengkapnya →',
+            style: GoogleFonts.poppins(
+              fontSize: 14,
+              color: const Color(0xFF1E3A8A),
+              fontWeight: FontWeight.w500,
+            ),
           ),
-          Text(unit, style: const TextStyle(color: Colors.grey, fontSize: 12)),
-          const SizedBox(height: 4),
-          Text(
-            title,
-            style: const TextStyle(fontSize: 12, color: Colors.grey),
-            textAlign: TextAlign.center,
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
-  Widget _buildChallengeSection() {
+  Widget _buildWeeklyStats() {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.1),
             spreadRadius: 1,
-            blurRadius: 5,
-            offset: const Offset(0, 2),
+            blurRadius: 8,
+            offset: const Offset(0, 3),
           ),
         ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Text(
+            'Statistik Mingguan',
+            style: GoogleFonts.poppins(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: const Color(0xFF1E3A8A),
+            ),
+          ),
+          const SizedBox(height: 16),
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: Colors.purple.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: const Icon(Icons.emoji_events, color: Colors.purple),
-              ),
-              const SizedBox(width: 12),
-              const Expanded(
-                child: Text(
-                  'Tantangan Minggu Ini',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-              ),
+              _buildStatItem('Total Jarak', '12.5 km'),
+              _buildStatItem('Total Waktu', '2h 15m'),
+              _buildStatItem('Rata-rata Pace', '6:30 /km'),
             ],
           ),
-          const SizedBox(height: 15),
-          SizedBox(
-            height: 120,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
+          
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStatItem(String label, String value) {
+    return Column(
+      children: [
+        Text(
+          value,
+          style: GoogleFonts.poppins(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: const Color(0xFF1E3A8A),
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          label,
+          style: GoogleFonts.poppins(
+            fontSize: 12,
+            color: Colors.grey[600],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildRecentActivities(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Aktivitas Terbaru',
+          style: GoogleFonts.poppins(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: const Color(0xFF1E3A8A),
+          ),
+        ),
+        const SizedBox(height: 16),
+        _buildActivityItem('🏃 Lari sore', '5.2 km – 35 menit', const Color(0xFFFF6B35)),
+        _buildActivityItem('🌇 Lari pagi', '3.8 km – 28 menit', const Color(0xFF1E3A8A)),
+        const SizedBox(height: 12),
+        TextButton(
+          onPressed: () {
+            Navigator.of(context, rootNavigator: true).pushNamed('/aktivitas');
+          },
+          child: Text(
+            'Lihat Semua Aktivitas',
+            style: GoogleFonts.poppins(
+              fontSize: 14,
+              color: const Color(0xFF1E3A8A),
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildActivityItem(String title, String subtitle, Color color) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 5,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildChallengeCard('Lari 10km', 'Progress: 7.5km', 0.75, Colors.blue),
-                const SizedBox(width: 12),
-                _buildChallengeCard(
-                    'Kalori 2000', 'Progress: 1250kcal', 0.625, Colors.orange),
-                const SizedBox(width: 12),
-                _buildChallengeCard('Langkah 10000', 'Progress: 8450 steps', 0.845,
-                    Colors.green),
+                Text(
+                  title,
+                  style: GoogleFonts.poppins(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: color,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  subtitle,
+                  style: GoogleFonts.poppins(
+                    fontSize: 12,
+                    color: Colors.grey[600],
+                  ),
+                ),
               ],
             ),
           ),
+          const Icon(Icons.chevron_right, color: Colors.grey),
         ],
       ),
     );
   }
 
-  Widget _buildChallengeCard(
-    String title,
-    String progress,
-    double progressValue,
-    Color color,
-  ) {
+  Widget _buildAIRecommendations(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Rekomendasi AI',
+          style: GoogleFonts.poppins(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: const Color(0xFF1E3A8A),
+          ),
+        ),
+        const SizedBox(height: 16),
+        Row(
+          children: [
+            Expanded(
+              child: _buildAICard(
+                context,
+                '👟 AI FootScan',
+                'Lihat rekomendasi sepatu terbaik sesuai bentuk kakimu.',
+                const Color(0xFF1E3A8A),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: _buildAICard(
+                context,
+                '🤖 AI Run Coach',
+                'Lihat latihan yang disarankan minggu ini.',
+                const Color(0xFFFF6B35),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildAICard(BuildContext context, String title, String subtitle, Color color) {
     return Container(
-      width: 200,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withOpacity(0.3), width: 1),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 5,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             title,
-            style: TextStyle(
+            style: GoogleFonts.poppins(
               fontSize: 16,
               fontWeight: FontWeight.bold,
               color: color,
             ),
           ),
           const SizedBox(height: 8),
-          Text(progress,
-              style: const TextStyle(fontSize: 12, color: Colors.grey)),
+          Text(
+            subtitle,
+            style: GoogleFonts.poppins(
+              fontSize: 12,
+              color: Colors.grey[600],
+            ),
+          ),
           const SizedBox(height: 12),
-          LinearProgressIndicator(
-            value: progressValue,
-            backgroundColor: color.withOpacity(0.2),
-            valueColor: AlwaysStoppedAnimation<Color>(color),
+          ElevatedButton(
+            onPressed: () {
+              if (title.contains('FootScan')) {
+                // Switch to scan tab (index 2) - same as bottom nav
+                onTabSwitch?.call(2);
+              } else if (title.contains('Run Coach')) {
+                // Switch to chatbot tab (index 3) - same as bottom nav
+                onTabSwitch?.call(3);
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: color,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            ),
+            child: Text(
+              'Coba Sekarang',
+              style: GoogleFonts.poppins(
+                fontSize: 12,
+                color: Colors.white,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildNutritionSection() {
+  
+
+  Widget _buildEventCard(String title, String date) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.1),
@@ -286,68 +459,20 @@ class BerandaTab extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: Colors.green.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: const Icon(Icons.restaurant_menu, color: Colors.green),
-              ),
-              const SizedBox(width: 12),
-              const Expanded(
-                child: Text(
-                  'Tips Nutrisi Hari Ini',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 15),
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.green[50],
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: Colors.green.withOpacity(0.3),
-                width: 1,
-              ),
+          Text(
+            title,
+            style: GoogleFonts.poppins(
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+              color: const Color(0xFF1E3A8A),
             ),
-            child: const Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Icon(Icons.lightbulb, color: Colors.green, size: 24),
-                    SizedBox(width: 8),
-                    Text(
-                      'Tips Hari Ini',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.green,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 12),
-                Text(
-                  'Konsumsi protein seimbang setiap hari untuk menjaga massa otot dan energi. Sumber protein baik termasuk ayam, ikan, telur, kacang-kacangan, dan produk susu rendah lemak.',
-                  style: TextStyle(fontSize: 14, color: Colors.black87, height: 1.5),
-                ),
-                SizedBox(height: 12),
-                Text(
-                  'Protein: 15-20% dari total kalori harian',
-                  style: TextStyle(
-                    color: Colors.green,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
+          ),
+          const SizedBox(height: 4),
+          Text(
+            date,
+            style: GoogleFonts.poppins(
+              fontSize: 12,
+              color: Colors.grey[600],
             ),
           ),
         ],
@@ -355,51 +480,31 @@ class BerandaTab extends StatelessWidget {
     );
   }
 
-  Widget _buildActivityItem(
-    String title,
-    String subtitle,
-    IconData icon,
-    Color color,
-  ) {
+  Widget _buildMotivationalQuote() {
     return Container(
-      margin: const EdgeInsets.only(bottom: 8),
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.1),
             spreadRadius: 1,
-            blurRadius: 3,
-            offset: const Offset(0, 1),
+            blurRadius: 5,
+            offset: const Offset(0, 2),
           ),
         ],
       ),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: color.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Icon(icon, color: color, size: 20),
+      child: Center(
+        child: Text(
+          '🏁 Lari bukan soal cepat, tapi soal konsisten.',
+          style: GoogleFonts.poppins(
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+            color: const Color(0xFF1E3A8A),
           ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(title,
-                    style: const TextStyle(fontWeight: FontWeight.w500)),
-                Text(subtitle,
-                    style: const TextStyle(color: Colors.grey, fontSize: 12)),
-              ],
-            ),
-          ),
-          const Icon(Icons.chevron_right, color: Colors.grey),
-        ],
+          textAlign: TextAlign.center,
+        ),
       ),
     );
   }

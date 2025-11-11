@@ -7,9 +7,18 @@ class NotifikasiPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Notifikasi'),
-        backgroundColor: const Color.fromARGB(255, 18, 106, 179),
-        foregroundColor: Colors.white,
+        backgroundColor: Colors.white,
+        elevation: 1,
+        title: const Text(
+          'Notifikasi',
+          style: TextStyle(
+            color: Color(0xFF1E3A8A), // Warna biru tua
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        iconTheme: const IconThemeData(
+          color: Color(0xFF1E3A8A), // Warna ikon di AppBar
+        ),
       ),
       body: ListView(
         padding: const EdgeInsets.all(16),
@@ -31,7 +40,8 @@ class NotifikasiPage extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.restaurant, color: Color(0xFF00B4D8)),
             title: Text('Rekomendasi Nutrisi'),
-            subtitle: Text('Coba makanan sehat untuk performa lari yang lebih baik.'),
+            subtitle:
+                Text('Coba makanan sehat untuk performa lari yang lebih baik.'),
             trailing: Text('2 jam lalu'),
           ),
           Divider(),

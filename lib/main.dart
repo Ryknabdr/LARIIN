@@ -10,6 +10,22 @@ import 'pages/onboarding.dart';
 import 'pages/login.dart';
 import 'pages/register.dart';
 import 'pages/notifikasi.dart';
+import 'pages/event_page.dart';
+import 'pages/aktivitas.dart';
+import 'pages/feedback_page.dart';
+import 'pages/manage_profile_page.dart';
+
+// Custom FAB location that doesn't move with Snackbar
+class CustomCenterDockedFloatingActionButtonLocation extends FloatingActionButtonLocation {
+  const CustomCenterDockedFloatingActionButtonLocation();
+
+  @override
+  Offset getOffset(ScaffoldPrelayoutGeometry scaffoldGeometry) {
+    final double fabX = (scaffoldGeometry.scaffoldSize.width - scaffoldGeometry.floatingActionButtonSize.width) / 2.0;
+    final double fabY = scaffoldGeometry.scaffoldSize.height - scaffoldGeometry.floatingActionButtonSize.height / 2.0 - scaffoldGeometry.bottomSheetSize.height;
+    return Offset(fabX, fabY);
+  }
+}
 
 void main() {
   runApp(const MyApp());
@@ -69,8 +85,8 @@ class _MyAppState extends State<MyApp> {
         useMaterial3: true,
         fontFamily: GoogleFonts.inter().fontFamily,
         appBarTheme: AppBarTheme(
-          backgroundColor: const Color.fromARGB(255, 18, 106, 179),
-          foregroundColor: Colors.white,
+          backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+          foregroundColor: const Color.fromARGB(255, 44, 41, 216),
           elevation: 0,
           titleTextStyle: GoogleFonts.inter(
             fontSize: 20,
@@ -106,6 +122,12 @@ class _MyAppState extends State<MyApp> {
         '/register': (context) => const RegisterPage(),
         '/home': (context) => const HomePage(),
         '/notifikasi': (context) => const NotifikasiPage(),
+        '/event': (context) => const EventPage(),
+        '/scan': (context) => const ScanMakananTab(),
+        '/chatbot': (context) => const ChatbotGiziTab(),
+        '/aktivitas': (context) => const AktivitasPage(),
+        '/feedback': (context) => const FeedbackPage(),
+        '/manage-profile': (context) => const ManageProfilePage(),
       },
       home: _initialScreen,
     );
@@ -122,15 +144,27 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
 
-  static final List<Widget> _pages = <Widget>[
-    const BerandaTab(),
-    const PelacakanLariTab(),
-    const ScanMakananTab(),
-    const ChatbotGiziTab(),
-    const ProfileScreen(),
-  ];
+  late List<Widget> _pages;
+
+  @override
+  void initState() {
+    super.initState();
+    _pages = <Widget>[
+      BerandaTab(onTabSwitch: switchToTab),
+      const PelacakanLariTab(),
+      const ScanMakananTab(),
+      const ChatbotGiziTab(),
+      const ProfileScreen(),
+    ];
+  }
 
   void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  void switchToTab(int index) {
     setState(() {
       _selectedIndex = index;
     });
@@ -174,7 +208,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButtonLocation: const CustomCenterDockedFloatingActionButtonLocation(),
       floatingActionButton: SizedBox(
         width: 72,
         height: 72,

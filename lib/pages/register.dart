@@ -27,7 +27,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
       try {
         final url = Uri.parse(
-          "http://192.168.1.14:5000/register",
+          "http://192.168.18.8:5000/register",
         ); // ⬅ ganti IP ini
         final response = await http.post(
           url,
