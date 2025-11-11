@@ -1,5 +1,3 @@
-Siap, aku rapihkan & jadikan **README** yang rapi dan enak dibaca:
-
 ---
 
 # 🚀 Setup & Instalasi Project Flutter
