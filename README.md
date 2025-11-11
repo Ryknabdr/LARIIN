@@ -65,5 +65,3 @@ Biasanya penyebabnya:
 
 ---
 
-Selamat coding! 🎉
-Kalau kamu mau, aku bisa juga **buatkan screenshot + panduan cara run di emulator / real device** 👍
