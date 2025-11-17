@@ -25,6 +25,8 @@ class AktivitasPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+
+              // judul bagian aktivitas
               Text(
                 'Riwayat Aktivitas Lari',
                 style: GoogleFonts.poppins(
@@ -33,10 +35,15 @@ class AktivitasPage extends StatelessWidget {
                   color: const Color(0xFF1E3A8A),
                 ),
               ),
+
               const SizedBox(height: 16),
+
+              // list aktivitasnya — scrollable
               Expanded(
                 child: ListView(
                   children: [
+
+                    // item aktivitas — tinggal tambah sendiri kalo perlu
                     _buildActivityItem('🏃 Lari sore', '5.2 km – 35 menit', const Color(0xFFFF6B35), 'Hari ini'),
                     _buildActivityItem('🌇 Lari pagi', '3.8 km – 28 menit', const Color(0xFF1E3A8A), 'Kemarin'),
                     _buildActivityItem('🏃 Lari malam', '4.5 km – 32 menit', const Color(0xFFFF6B35), '2 hari lalu'),
@@ -55,6 +62,7 @@ class AktivitasPage extends StatelessWidget {
     );
   }
 
+  // card item aktivitas — biar ga nulis ulang terus
   Widget _buildActivityItem(String title, String subtitle, Color color, String date) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
@@ -63,6 +71,7 @@ class AktivitasPage extends StatelessWidget {
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
+          // shadow halus biar cardnya keliatan terangkat
           BoxShadow(
             color: Colors.grey.withOpacity(0.1),
             spreadRadius: 1,
@@ -73,19 +82,26 @@ class AktivitasPage extends StatelessWidget {
       ),
       child: Row(
         children: [
+
+          // teks kiri (judul, jarak, tanggal)
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+
+                // judul + emoji
                 Text(
                   title,
                   style: GoogleFonts.poppins(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
-                    color: color,
+                    color: color, // warna beda biar mudah dibedain
                   ),
                 ),
+
                 const SizedBox(height: 4),
+
+                // info jarak & durasi
                 Text(
                   subtitle,
                   style: GoogleFonts.poppins(
@@ -93,7 +109,10 @@ class AktivitasPage extends StatelessWidget {
                     color: Colors.grey[600],
                   ),
                 ),
+
                 const SizedBox(height: 4),
+
+                // tanggal aktivitas
                 Text(
                   date,
                   style: GoogleFonts.poppins(
@@ -104,6 +123,8 @@ class AktivitasPage extends StatelessWidget {
               ],
             ),
           ),
+
+          // ikon next — cuma dekor
           const Icon(Icons.chevron_right, color: Colors.grey),
         ],
       ),

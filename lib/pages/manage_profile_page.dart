@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 class ManageProfilePage extends StatelessWidget {
   const ManageProfilePage({super.key});
 
+  // snack bar simpel buat nampilin info "coming soon"
   void _showComingSoonSnackBar(BuildContext context, String feature) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('$feature akan segera hadir')),
@@ -13,6 +14,7 @@ class ManageProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // app bar halaman manage profile
       appBar: AppBar(
         title: Text(
           'Kelola Profil',
@@ -26,11 +28,15 @@ class ManageProfilePage extends StatelessWidget {
         elevation: 0,
         iconTheme: const IconThemeData(color: Color(0xFF1E3A8A)),
       ),
+
+      // padding konten utama
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+
+            // judul bagian pengaturan profile
             Text(
               'Pengaturan Profil',
               style: GoogleFonts.poppins(
@@ -40,6 +46,8 @@ class ManageProfilePage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 24),
+
+            // card: ubah foto (masih coming soon)
             _buildOptionCard(
               context,
               icon: Icons.photo_camera,
@@ -48,6 +56,8 @@ class ManageProfilePage extends StatelessWidget {
               onTap: () => _showComingSoonSnackBar(context, 'Ubah Foto Profil'),
             ),
             const SizedBox(height: 16),
+
+            // card ubah password
             _buildOptionCard(
               context,
               icon: Icons.lock,
@@ -56,6 +66,8 @@ class ManageProfilePage extends StatelessWidget {
               onTap: () => _showComingSoonSnackBar(context, 'Ubah Kata Sandi'),
             ),
             const SizedBox(height: 16),
+
+            // card pengaturan notifikasi
             _buildOptionCard(
               context,
               icon: Icons.notifications,
@@ -69,6 +81,7 @@ class ManageProfilePage extends StatelessWidget {
     );
   }
 
+  // widget card menu — biar ga ulang-ulang UI
   Widget _buildOptionCard(
     BuildContext context, {
     required IconData icon,
@@ -77,13 +90,14 @@ class ManageProfilePage extends StatelessWidget {
     required VoidCallback onTap,
   }) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: onTap, // klik → ngejalanin fungsi
       child: Container(
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(15),
           boxShadow: [
+            // efek shadow biar keliatan lebih modern
             BoxShadow(
               color: Colors.grey.withOpacity(0.1),
               spreadRadius: 1,
@@ -94,6 +108,7 @@ class ManageProfilePage extends StatelessWidget {
         ),
         child: Row(
           children: [
+            // icon sebelah kiri
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
@@ -103,6 +118,8 @@ class ManageProfilePage extends StatelessWidget {
               child: Icon(icon, color: const Color(0xFF00B4D8), size: 24),
             ),
             const SizedBox(width: 16),
+
+            // teks judul + deskripsi
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -126,6 +143,8 @@ class ManageProfilePage extends StatelessWidget {
                 ],
               ),
             ),
+
+            // icon panah di kanan
             const Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 18),
           ],
         ),

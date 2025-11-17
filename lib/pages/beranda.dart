@@ -12,15 +12,15 @@ class BerandaTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: false, // biar ga naik turun pas keyboard buka
       body: SafeArea(
-        child: SingleChildScrollView(
+        child: SingleChildScrollView( // biar bisa scroll
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Header
+                // header bagian atas
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -35,31 +35,27 @@ class BerandaTab extends StatelessWidget {
                     IconButton(
                       icon: const Icon(Icons.notifications_outlined, color: Color(0xFF1E3A8A)),
                       onPressed: () {
-                        Navigator.pushNamed(context, '/notifikasi');
+                        Navigator.pushNamed(context, '/notifikasi'); // buka notif
                       },
                     ),
                   ],
                 ),
+
                 const SizedBox(height: 20),
 
-                // Weekly Stats
-                _buildWeeklyStats(),
+                _buildWeeklyStats(), // card statistik
                 const SizedBox(height: 20),
 
-                  // Event Slider
-                _buildEventSlider(context),
+                _buildEventSlider(context), // slider event
                 const SizedBox(height: 20),
 
-                // AI Recommendations
-                _buildAIRecommendations(context),
+                _buildAIRecommendations(context), // fitur AI
                 const SizedBox(height: 20),
 
-                 // Recent Activities
-                _buildRecentActivities(context),
+                _buildRecentActivities(context), // list aktivitas
                 const SizedBox(height: 20),
 
-                // Motivational Quote
-                _buildMotivationalQuote(),
+                _buildMotivationalQuote(), // quote motivasi
               ],
             ),
           ),
@@ -68,7 +64,7 @@ class BerandaTab extends StatelessWidget {
     );
   }
 
-  // ======== COMPONENTS =========
+  // slider event
   Widget _buildEventSlider(BuildContext context) {
     final List<Map<String, String>> events = [
       {
@@ -99,7 +95,7 @@ class BerandaTab extends StatelessWidget {
         CarouselSlider(
           options: CarouselOptions(
             height: 200,
-            autoPlay: true,
+            autoPlay: true, // auto jalan
             enlargeCenterPage: true,
             viewportFraction: 0.9,
           ),
@@ -109,19 +105,20 @@ class BerandaTab extends StatelessWidget {
               margin: const EdgeInsets.symmetric(horizontal: 5.0),
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(20), // rounding
                 boxShadow: [
                   BoxShadow(
                     color: Colors.grey.withOpacity(0.1),
                     spreadRadius: 1,
                     blurRadius: 5,
-                    offset: const Offset(0, 2),
+                    offset: const Offset(0, 2), // shadow bawah
                   ),
                 ],
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // gambar event
                   ClipRRect(
                     borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
                     child: Image.asset(
@@ -134,16 +131,14 @@ class BerandaTab extends StatelessWidget {
                           height: 120,
                           color: Colors.grey[300],
                           child: const Center(
-                            child: Icon(
-                              Icons.image_not_supported,
-                              size: 40,
-                              color: Colors.grey,
-                            ),
+                            child: Icon(Icons.image_not_supported, size: 40, color: Colors.grey),
                           ),
                         );
                       },
                     ),
                   ),
+
+                  // text event
                   Padding(
                     padding: const EdgeInsets.all(12),
                     child: Column(
@@ -160,10 +155,7 @@ class BerandaTab extends StatelessWidget {
                         const SizedBox(height: 4),
                         Text(
                           '${event['date']} • ${event['location']}',
-                          style: GoogleFonts.poppins(
-                            fontSize: 12,
-                            color: Colors.grey[600],
-                          ),
+                          style: GoogleFonts.poppins(fontSize: 12, color: Colors.grey[600]),
                         ),
                       ],
                     ),
@@ -173,7 +165,10 @@ class BerandaTab extends StatelessWidget {
             );
           }).toList(),
         ),
+        
         const SizedBox(height: 10),
+
+        // tombol lihat semua event
         TextButton(
           onPressed: () {
             Navigator.of(context, rootNavigator: true).pushNamed('/event');
@@ -191,6 +186,7 @@ class BerandaTab extends StatelessWidget {
     );
   }
 
+  // card statistik
   Widget _buildWeeklyStats() {
     return Container(
       padding: const EdgeInsets.all(20),
@@ -217,7 +213,10 @@ class BerandaTab extends StatelessWidget {
               color: const Color(0xFF1E3A8A),
             ),
           ),
+
           const SizedBox(height: 16),
+
+          // 3 data stat
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -226,12 +225,12 @@ class BerandaTab extends StatelessWidget {
               _buildStatItem('Rata-rata Pace', '6:30 /km'),
             ],
           ),
-          
         ],
       ),
     );
   }
 
+  // item stat satuan
   Widget _buildStatItem(String label, String value) {
     return Column(
       children: [
@@ -246,15 +245,13 @@ class BerandaTab extends StatelessWidget {
         const SizedBox(height: 4),
         Text(
           label,
-          style: GoogleFonts.poppins(
-            fontSize: 12,
-            color: Colors.grey[600],
-          ),
+          style: GoogleFonts.poppins(fontSize: 12, color: Colors.grey[600]),
         ),
       ],
     );
   }
 
+  // list aktivitas terakhir
   Widget _buildRecentActivities(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -267,10 +264,15 @@ class BerandaTab extends StatelessWidget {
             color: const Color(0xFF1E3A8A),
           ),
         ),
+
         const SizedBox(height: 16),
+
         _buildActivityItem('🏃 Lari sore', '5.2 km – 35 menit', const Color(0xFFFF6B35)),
         _buildActivityItem('🌇 Lari pagi', '3.8 km – 28 menit', const Color(0xFF1E3A8A)),
+
         const SizedBox(height: 12),
+
+        // tombol lihat semua aktivitas
         TextButton(
           onPressed: () {
             Navigator.of(context, rootNavigator: true).pushNamed('/aktivitas');
@@ -288,6 +290,7 @@ class BerandaTab extends StatelessWidget {
     );
   }
 
+  // satuan aktivitas
   Widget _buildActivityItem(String title, String subtitle, Color color) {
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
@@ -306,6 +309,7 @@ class BerandaTab extends StatelessWidget {
       ),
       child: Row(
         children: [
+          // text kiri
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -329,12 +333,15 @@ class BerandaTab extends StatelessWidget {
               ],
             ),
           ),
+
+          // panah kanan
           const Icon(Icons.chevron_right, color: Colors.grey),
         ],
       ),
     );
   }
 
+  // card fitur AI
   Widget _buildAIRecommendations(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -347,7 +354,9 @@ class BerandaTab extends StatelessWidget {
             color: const Color(0xFF1E3A8A),
           ),
         ),
+
         const SizedBox(height: 16),
+
         Row(
           children: [
             Expanded(
@@ -358,7 +367,9 @@ class BerandaTab extends StatelessWidget {
                 const Color(0xFF1E3A8A),
               ),
             ),
+
             const SizedBox(width: 12),
+
             Expanded(
               child: _buildAICard(
                 context,
@@ -373,6 +384,7 @@ class BerandaTab extends StatelessWidget {
     );
   }
 
+  // card kecil AI
   Widget _buildAICard(BuildContext context, String title, String subtitle, Color color) {
     return Container(
       padding: const EdgeInsets.all(16),
@@ -391,46 +403,41 @@ class BerandaTab extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            title,
+          Text(title,
             style: GoogleFonts.poppins(
               fontSize: 16,
               fontWeight: FontWeight.bold,
               color: color,
             ),
           ),
+
           const SizedBox(height: 8),
+
           Text(
             subtitle,
-            style: GoogleFonts.poppins(
-              fontSize: 12,
-              color: Colors.grey[600],
-            ),
+            style: GoogleFonts.poppins(fontSize: 12, color: Colors.grey[600]),
           ),
+
           const SizedBox(height: 12),
+
+          // tombol coba AI
           ElevatedButton(
             onPressed: () {
               if (title.contains('FootScan')) {
-                // Switch to scan tab (index 2) - same as bottom nav
-                onTabSwitch?.call(2);
+                onTabSwitch?.call(2); // buka tab scan
               } else if (title.contains('Run Coach')) {
-                // Switch to chatbot tab (index 3) - same as bottom nav
-                onTabSwitch?.call(3);
+                onTabSwitch?.call(3); // buka chatbot
               }
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: color,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             ),
             child: Text(
               'Coba Sekarang',
               style: GoogleFonts.poppins(
-                fontSize: 12,
-                color: Colors.white,
-                fontWeight: FontWeight.w500,
+                fontSize: 12, color: Colors.white, fontWeight: FontWeight.w500,
               ),
             ),
           ),
@@ -439,47 +446,7 @@ class BerandaTab extends StatelessWidget {
     );
   }
 
-  
-
-  Widget _buildEventCard(String title, String date) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            spreadRadius: 1,
-            blurRadius: 5,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            style: GoogleFonts.poppins(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: const Color(0xFF1E3A8A),
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            date,
-            style: GoogleFonts.poppins(
-              fontSize: 12,
-              color: Colors.grey[600],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
+  // card quote motivasi
   Widget _buildMotivationalQuote() {
     return Container(
       padding: const EdgeInsets.all(20),

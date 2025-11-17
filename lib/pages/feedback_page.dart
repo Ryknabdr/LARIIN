@@ -13,6 +13,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
   int _selectedRating = 0;
 
   void _submitFeedback() {
+    // cek dulu isi feedback kosong apa nggak
     if (_feedbackController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Mohon isi feedback Anda'), duration: Duration(seconds: 2)),
@@ -20,6 +21,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
       return;
     }
 
+    // cek rating dipilih atau belum
     if (_selectedRating  == 0) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Mohon berikan rating'), duration: Duration(seconds: 2)),
@@ -27,12 +29,12 @@ class _FeedbackPageState extends State<FeedbackPage> {
       return;
     }
 
-    // Here you would typically send the feedback to your backend
+    // nanti logic kirim ke backend di sini
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Terima kasih atas feedback Anda!'), duration: Duration(seconds: 2)),
     );
 
-    // Clear the form
+    // reset form setelah submit
     _feedbackController.clear();
     setState(() {
       _selectedRating = 0;
@@ -60,6 +62,8 @@ class _FeedbackPageState extends State<FeedbackPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+
+            // judul utama halaman feedback
             Text(
               'Bagaimana pengalaman Anda menggunakan Lariin?',
               style: GoogleFonts.poppins(
@@ -68,9 +72,10 @@ class _FeedbackPageState extends State<FeedbackPage> {
                 color: const Color(0xFF1E3A8A),
               ),
             ),
+
             const SizedBox(height: 24),
 
-            // Rating Section
+            // bagian rating
             Text(
               'Beri Rating',
               style: GoogleFonts.poppins(
@@ -79,14 +84,17 @@ class _FeedbackPageState extends State<FeedbackPage> {
                 color: Colors.grey[700],
               ),
             ),
+
             const SizedBox(height: 12),
+
+            // bintang rating — tinggal klik, langsung ke-set
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(5, (index) {
                 return IconButton(
                   onPressed: () {
                     setState(() {
-                      _selectedRating = index + 1;
+                      _selectedRating = index + 1; // set bintang sesuai klik
                     });
                   },
                   icon: Icon(
@@ -97,9 +105,10 @@ class _FeedbackPageState extends State<FeedbackPage> {
                 );
               }),
             ),
+
             const SizedBox(height: 24),
 
-            // Feedback Text Field
+            // input text feedback
             Text(
               'Tulis Feedback Anda',
               style: GoogleFonts.poppins(
@@ -108,12 +117,16 @@ class _FeedbackPageState extends State<FeedbackPage> {
                 color: Colors.grey[700],
               ),
             ),
+
             const SizedBox(height: 12),
+
+            // box input feedback — desain card
             Container(
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(15),
                 boxShadow: [
+                  // shadow biar keliatan angkat
                   BoxShadow(
                     color: Colors.grey.withOpacity(0.1),
                     spreadRadius: 1,
@@ -132,7 +145,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
                   ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
-                    borderSide: BorderSide.none,
+                    borderSide: BorderSide.none, // bersih tanpa garis
                   ),
                   filled: true,
                   fillColor: Colors.white,
@@ -141,9 +154,10 @@ class _FeedbackPageState extends State<FeedbackPage> {
                 style: GoogleFonts.poppins(),
               ),
             ),
+
             const SizedBox(height: 24),
 
-            // Common Feedback Options
+            // pilihan kategori chip (tinggal klik langsung nambah ke text)
             Text(
               'Atau pilih kategori feedback:',
               style: GoogleFonts.poppins(
@@ -152,7 +166,10 @@ class _FeedbackPageState extends State<FeedbackPage> {
                 color: Colors.grey[700],
               ),
             ),
+
             const SizedBox(height: 12),
+
+            // chip kategori — bisa pilih cepat tanpa nulis
             Wrap(
               spacing: 8,
               runSpacing: 8,
@@ -164,14 +181,15 @@ class _FeedbackPageState extends State<FeedbackPage> {
                 _buildFeedbackChip('Lainnya'),
               ],
             ),
+
             const SizedBox(height: 32),
 
-            // Submit Button
+            // tombol submit
             SizedBox(
               width: double.infinity,
               height: 55,
               child: ElevatedButton(
-                onPressed: _submitFeedback,
+                onPressed: _submitFeedback, // trigger fungsi submit
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF1E3A8A),
                   foregroundColor: Colors.white,
@@ -196,6 +214,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
     );
   }
 
+  // builder untuk chip kategori — klik langsung auto nambah text
   Widget _buildFeedbackChip(String label) {
     return FilterChip(
       label: Text(
@@ -205,9 +224,9 @@ class _FeedbackPageState extends State<FeedbackPage> {
           color: Colors.grey[700],
         ),
       ),
-      selected: false,
+      selected: false, // ga pakai mode multi select, cuma nambah text
       onSelected: (selected) {
-        // Handle chip selection - could append to feedback text
+        // nambah label ke textfield saat chip diklik
         _feedbackController.text += '$label ';
       },
       backgroundColor: Colors.white,

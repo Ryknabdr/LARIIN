@@ -6,6 +6,7 @@ class ScanMakananTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // AppBar bagian atas halaman
       appBar: AppBar(
         title: const Text(
           'Scan Kaki',
@@ -15,19 +16,23 @@ class ScanMakananTab extends StatelessWidget {
           ),
         ),
         actions: [
+          // Tombol settings di kanan
           IconButton(
             icon: const Icon(Icons.settings_outlined, color: Color(0xFF1E3A8A)),
             onPressed: () {},
           ),
         ],
         backgroundColor: Colors.white,
-        elevation: 1,
+        elevation: 1, // bayangan tipis agar terlihat clean
       ),
+
+      // Isi halaman bisa di-scroll
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Judul bagian metode scan
             Text(
               'Pilih Metode Scan',
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
@@ -36,16 +41,17 @@ class ScanMakananTab extends StatelessWidget {
             ),
             const SizedBox(height: 16),
 
-            // Scan Options
+            // Dua pilihan: Kamera dan Galeri
             Row(
               children: [
                 Expanded(
                   child: _buildScanOption(
                     context,
-                    Icons.camera_alt,
+                    Icons.camera_alt,      // ikon kamera
                     'Kamera',
                     'Ambil foto kaki',
                     () {
+                      // Dummy action
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Tombol Kamera ditekan')),
                       );
@@ -56,10 +62,11 @@ class ScanMakananTab extends StatelessWidget {
                 Expanded(
                   child: _buildScanOption(
                     context,
-                    Icons.photo_library,
+                    Icons.photo_library,   // ikon galeri
                     'Galeri',
                     'Pilih dari galeri',
                     () {
+                      // Dummy action
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Tombol Galeri ditekan')),
                       );
@@ -71,7 +78,7 @@ class ScanMakananTab extends StatelessWidget {
 
             const SizedBox(height: 32),
 
-            // Image Preview Placeholder
+            // Placeholder Preview Gambar
             Container(
               height: 200,
               width: double.infinity,
@@ -89,7 +96,7 @@ class ScanMakananTab extends StatelessWidget {
 
             const SizedBox(height: 16),
 
-            // Scan Result Placeholder
+            // Kartu Hasil Scan
             Card(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -104,6 +111,8 @@ class ScanMakananTab extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: 16),
+
+                    // Placeholder hasil scan (belum ada AI)
                     Center(
                       child: Text(
                         'Hasil scan akan tampil di sini',
@@ -121,12 +130,13 @@ class ScanMakananTab extends StatelessWidget {
     );
   }
 
+  // Widget reusable untuk tombol pilihan scan (kamera & galeri)
   Widget _buildScanOption(
     BuildContext context,
-    IconData icon,
-    String title,
-    String subtitle,
-    VoidCallback onTap,
+    IconData icon,      // ikon (kamera / galeri)
+    String title,       // judul (Kamera / Galeri)
+    String subtitle,    // deskripsi kecil
+    VoidCallback onTap, // fungsi ketika ditekan
   ) {
     return InkWell(
       onTap: onTap,

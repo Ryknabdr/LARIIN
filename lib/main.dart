@@ -15,49 +15,49 @@ import 'pages/aktivitas.dart';
 import 'pages/feedback_page.dart';
 import 'pages/manage_profile_page.dart';
 
-// Custom FAB location that doesn't move with Snackbar
+// posisi FAB biar pas di tengah bawah
 class CustomCenterDockedFloatingActionButtonLocation extends FloatingActionButtonLocation {
   const CustomCenterDockedFloatingActionButtonLocation();
 
   @override
-  Offset getOffset(ScaffoldPrelayoutGeometry scaffoldGeometry) {
-    final double fabX = (scaffoldGeometry.scaffoldSize.width - scaffoldGeometry.floatingActionButtonSize.width) / 2.0;
-    final double fabY = scaffoldGeometry.scaffoldSize.height - scaffoldGeometry.floatingActionButtonSize.height / 2.0 - scaffoldGeometry.bottomSheetSize.height;
+  Offset getOffset(ScaffoldPrelayoutGeometry g) {
+    final fabX = (g.scaffoldSize.width - g.floatingActionButtonSize.width) / 2;
+    final fabY = g.scaffoldSize.height - g.floatingActionButtonSize.height / 0.7 - g.bottomSheetSize.height;
     return Offset(fabX, fabY);
   }
 }
 
 void main() {
-  runApp(const MyApp());
+  runApp(const MyApp()); // mulai app
 }
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
-
   @override
   State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-  Widget? _initialScreen;
+  Widget? _initialScreen; // tampilan awal
 
   @override
   void initState() {
     super.initState();
-    _checkAuthentication();
+    _checkAuthentication(); // cek onboarding/login
   }
 
+  // cek apakah pertama kali buka / sudah login
   Future<void> _checkAuthentication() async {
     final prefs = await SharedPreferences.getInstance();
     final isFirstLaunch = prefs.getBool('isFirstLaunch') ?? true;
     final isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
 
     if (isFirstLaunch) {
-      _initialScreen = const OnboardingPage();
+      _initialScreen = const OnboardingPage(); // pertama kali
     } else if (!isLoggedIn) {
-      _initialScreen = const LoginPage();
+      _initialScreen = const LoginPage(); // belum login
     } else {
-      _initialScreen = const HomePage();
+      _initialScreen = const HomePage(); // sudah login
     }
 
     setState(() {});
@@ -65,91 +65,57 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    // loading sebentar
     if (_initialScreen == null) {
       return const MaterialApp(
-        home: Scaffold(
-          body: Center(
-            child: CircularProgressIndicator(),
-          ),
-        ),
+        home: Scaffold(body: Center(child: CircularProgressIndicator())),
       );
     }
 
     return MaterialApp(
       title: 'Lariin',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF0077BE), // Professional blue
-          brightness: Brightness.light,
-        ),
         useMaterial3: true,
-        fontFamily: GoogleFonts.inter().fontFamily,
-        appBarTheme: AppBarTheme(
-          backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-          foregroundColor: const Color.fromARGB(255, 44, 41, 216),
-          elevation: 0,
-          titleTextStyle: GoogleFonts.inter(
-            fontSize: 20,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-          selectedItemColor: Color(0xFF00B4D8),
-          unselectedItemColor: Colors.grey,
-          backgroundColor: Colors.white,
-          elevation: 8,
-        ),
-        cardTheme: const CardThemeData(
-          elevation: 4,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(12)),
-          ),
-        ),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xFF00B4D8),
-            foregroundColor: Colors.white,
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-          ),
-        ),
+        fontFamily: GoogleFonts.inter().fontFamily, // font app
       ),
+
+      // route halaman
       routes: {
-        '/onboarding': (context) => const OnboardingPage(),
-        '/login': (context) => const LoginPage(),
-        '/register': (context) => const RegisterPage(),
-        '/home': (context) => const HomePage(),
-        '/notifikasi': (context) => const NotifikasiPage(),
-        '/event': (context) => const EventPage(),
-        '/scan': (context) => const ScanMakananTab(),
-        '/chatbot': (context) => const ChatbotGiziTab(),
-        '/aktivitas': (context) => const AktivitasPage(),
-        '/feedback': (context) => const FeedbackPage(),
-        '/manage-profile': (context) => const ManageProfilePage(),
+        '/onboarding': (_) => const OnboardingPage(),
+        '/login': (_) => const LoginPage(),
+        '/register': (_) => const RegisterPage(),
+        '/home': (_) => const HomePage(),
+        '/notifikasi': (_) => const NotifikasiPage(),
+        '/event': (_) => const EventPage(),
+        '/scan': (_) => const ScanMakananTab(),
+        '/chatbot': (_) => const ChatbotGiziTab(),
+        '/aktivitas': (_) => const AktivitasPage(),
+        '/feedback': (_) => const FeedbackPage(),
+        '/manage-profile': (_) => const ManageProfilePage(),
       },
-      home: _initialScreen,
+
+      home: _initialScreen, // tampilkan sesuai kondisi
     );
   }
 }
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
-
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  int _selectedIndex = 0;
+  int _selectedIndex = 0; // index tab
 
   late List<Widget> _pages;
 
   @override
   void initState() {
     super.initState();
-    _pages = <Widget>[
+
+    // list tab yg ada di bottom nav
+    _pages = [
       BerandaTab(onTabSwitch: switchToTab),
       const PelacakanLariTab(),
       const ScanMakananTab(),
@@ -158,47 +124,54 @@ class _HomePageState extends State<HomePage> {
     ];
   }
 
+  // ganti tab pas klik icon
   void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+    setState(() => _selectedIndex = index);
   }
 
+  // ganti tab dari beranda
   void switchToTab(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+    setState(() => _selectedIndex = index);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: _pages[_selectedIndex],
+      body: _pages[_selectedIndex], // tampilin page aktif
+
+      // bottom nav nya
       bottomNavigationBar: BottomAppBar(
-        shape: const CircularNotchedRectangle(),
-        notchMargin: 8.0,
+        shape: const CircularNotchedRectangle(), // buat lubang FAB
+        notchMargin: 8,
         child: SizedBox(
           height: 64,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
+            children: [
+              // home
               IconButton(
                 icon: const Icon(Icons.home),
                 color: _selectedIndex == 0 ? Colors.lightBlue : Colors.grey,
                 onPressed: () => _onItemTapped(0),
               ),
+
+              // running tab
               IconButton(
                 icon: const Icon(Icons.directions_run),
                 color: _selectedIndex == 1 ? Colors.lightBlue : Colors.grey,
                 onPressed: () => _onItemTapped(1),
               ),
-              const SizedBox(width: 48), // area buat FAB
+
+              const SizedBox(width: 48), // tempat kosong buat FAB
+
+              // chatbot
               IconButton(
                 icon: const Icon(Icons.chat),
                 color: _selectedIndex == 3 ? Colors.lightBlue : Colors.grey,
                 onPressed: () => _onItemTapped(3),
               ),
+
+              // profil
               IconButton(
                 icon: const Icon(Icons.person),
                 color: _selectedIndex == 4 ? Colors.lightBlue : Colors.grey,
@@ -208,15 +181,17 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
+
+      // tombol besar tengah (kamera)
       floatingActionButtonLocation: const CustomCenterDockedFloatingActionButtonLocation(),
       floatingActionButton: SizedBox(
         width: 72,
         height: 72,
         child: FloatingActionButton(
           backgroundColor: Colors.blueAccent,
-          elevation: 8,
+           elevation: 8,
           shape: const CircleBorder(),
-          onPressed: () => _onItemTapped(2),
+          onPressed: () => _onItemTapped(2), // buka tab scan makanan
           child: const Icon(Icons.camera_alt, size: 40),
         ),
       ),

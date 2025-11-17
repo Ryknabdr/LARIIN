@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+// Halaman Profile utama
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
@@ -10,16 +11,19 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  // Controller untuk nama & email
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
+    // Data dummy sementara
     _nameController.text = 'Pengguna Demo';
     _emailController.text = 'demo@example.com';
   }
 
+  // Fungsi logout: hapus SharedPreferences + arahkan ke halaman login
   void _logout() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.clear();
@@ -28,19 +32,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
       const SnackBar(content: Text('Logout berhasil')),
     );
 
+    // Hapus semua halaman sebelumnya & pindah ke login
     Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
   }
-
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF2F6FA),
+      // backgroundColor: const Color(0xFFF2F6FA), // background lembut
       body: SafeArea(
         child: Column(
           children: [
-            // Header Section
+            // =========================
+            // Bagian Header Profile
+            // =========================
             Container(
               width: double.infinity,
               padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
@@ -57,12 +62,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               child: Column(
                 children: [
+                  // Foto profil default
                   const CircleAvatar(
                     radius: 55,
                     backgroundColor: Colors.white,
                     child: Icon(Icons.person, size: 60, color: Color(0xFF1E3A8A)),
                   ),
                   const SizedBox(height: 14),
+
+                  // Teks nama user
                   Text(
                     _nameController.text,
                     style: GoogleFonts.poppins(
@@ -71,7 +79,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       color: Colors.white,
                     ),
                   ),
+
                   const SizedBox(height: 4),
+
+                  // Teks email user
                   Text(
                     _emailController.text,
                     style: GoogleFonts.poppins(
@@ -85,39 +96,52 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
             const SizedBox(height: 30),
 
-            // Menu Card Section
+            // =========================
+            // Bagian Menu
+            // =========================
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
+                    // Menu kelola profil
                     _menuCard(
                       icon: Icons.settings,
                       title: 'Kelola Profil',
                       color: const Color(0xFF2563EB),
                       onTap: () => Navigator.pushNamed(context, '/manage-profile'),
                     ),
+
+                    // Menu riwayat lari
                     _menuCard(
                       icon: Icons.directions_run,
                       title: 'Riwayat Lari',
                       color: const Color(0xFF00B4D8),
                       onTap: () => Navigator.pushNamed(context, '/aktivitas'),
                     ),
+
+                    // Menu event lari
                     _menuCard(
                       icon: Icons.event,
                       title: 'Event Lari',
                       color: const Color(0xFFFF6B35),
                       onTap: () => Navigator.pushNamed(context, '/event'),
                     ),
+
+                    // Menu feedback
                     _menuCard(
                       icon: Icons.feedback,
                       title: 'Feedback',
                       color: const Color(0xFF00B4D8),
                       onTap: () => Navigator.pushNamed(context, '/feedback'),
                     ),
+
                     const Spacer(),
+
+                    // Tombol logout
                     _logoutButton(),
+
                     const SizedBox(height: 20),
                   ],
                 ),
@@ -129,6 +153,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
+  // Widget untuk 1 bar menu
   Widget _menuCard({
     required IconData icon,
     required String title,
@@ -153,6 +178,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
         child: Row(
           children: [
+            // Ikon di kiri
             Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
@@ -162,6 +188,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: Icon(icon, color: color, size: 26),
             ),
             const SizedBox(width: 16),
+
+            // Text menu
             Expanded(
               child: Text(
                 title,
@@ -172,6 +200,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ),
             ),
+
+            // Icon panah
             const Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 18),
           ],
         ),
@@ -179,6 +209,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
+  // Tombol logout
   Widget _logoutButton() {
     return ElevatedButton.icon(
       onPressed: _logout,
