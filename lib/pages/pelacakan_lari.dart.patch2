@@ -1,0 +1,49 @@
+key: const ValueKey('google_map'), // Force stable widget identity to avoid blank on reload
+            initialCameraPosition: _initialCameraPosition,
+            myLocationEnabled: true,
+            myLocationButtonEnabled: true,
+            zoomControlsEnabled: false,
+            polylines: polylines,
+            markers: _lastPosition != null ? {
+              Marker(
+                markerId: const MarkerId('user_location'),
+                position: LatLng(_lastPosition!.latitude, _lastPosition!.longitude),
+                icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure),
+              )
+            } : {},
+            onMapCreated: (controller) {
+              if (!_mapController.isCompleted) _mapController.complete(controller);
+            },
+          ),
+=======
+          GoogleMap(
+            key: const ValueKey('google_map'), // Force stable widget identity to avoid blank on reload
+            initialCameraPosition: _initialCameraPosition,
+            myLocationEnabled: true,
+            myLocationButtonEnabled: true,
+            zoomControlsEnabled: false,
+            polylines: polylines,
+            markers: _lastPosition != null ? {
+              Marker(
+                markerId: const MarkerId('user_location'),
+                position: LatLng(_lastPosition!.latitude, _lastPosition!.longitude),
+                icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure),
+              )
+            } : {},
+            onMapCreated: (controller) {
+              if (!_mapController.isCompleted) _mapController.complete(controller);
+
+              setState(() {
+                _mapReady = true;
+              });
+
+              // After map is ready, try moving to current location if permission granted
+              _checkPermissionOnStart();
+            },
+          ),
+          if (!_mapReady)
+            const Positioned.fill(
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            ),

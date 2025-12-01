@@ -120,7 +120,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 TextFormField(
                   controller: _nameController,
                   decoration: const InputDecoration(
-                    labelText: 'Ussername',
+                    labelText: 'Username',
                     prefixIcon: Icon(Icons.person), // icon orang
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -128,7 +128,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Ussername tidak boleh kosong';
+                      return 'Username tidak boleh kosong';
                     }
                     return null;
                   },
@@ -229,6 +229,8 @@ class _RegisterPageState extends State<RegisterPage> {
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
+                              color: Colors.white
+
                             ),
                           ),
                   ),

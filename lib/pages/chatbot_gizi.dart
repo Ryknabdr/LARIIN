@@ -56,12 +56,6 @@ class _ChatbotGiziTabState extends State<ChatbotGiziTab> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.settings_outlined, color: Color(0xFF1E3A8A)),
-            onPressed: () {},
-          ),
-        ],
         backgroundColor: Colors.white,
         elevation: 1,
       ),

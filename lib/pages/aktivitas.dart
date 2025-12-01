@@ -46,12 +46,7 @@ class AktivitasPage extends StatelessWidget {
                     // item aktivitas — tinggal tambah sendiri kalo perlu
                     _buildActivityItem('🏃 Lari sore', '5.2 km – 35 menit', const Color(0xFFFF6B35), 'Hari ini'),
                     _buildActivityItem('🌇 Lari pagi', '3.8 km – 28 menit', const Color(0xFF1E3A8A), 'Kemarin'),
-                    _buildActivityItem('🏃 Lari malam', '4.5 km – 32 menit', const Color(0xFFFF6B35), '2 hari lalu'),
-                    _buildActivityItem('🌅 Lari pagi', '6.0 km – 42 menit', const Color(0xFF1E3A8A), '3 hari lalu'),
-                    _buildActivityItem('🏃 Lari sore', '4.2 km – 30 menit', const Color(0xFFFF6B35), '4 hari lalu'),
-                    _buildActivityItem('🌇 Lari pagi', '5.5 km – 38 menit', const Color(0xFF1E3A8A), '5 hari lalu'),
-                    _buildActivityItem('🏃 Lari malam', '3.9 km – 29 menit', const Color(0xFFFF6B35), '6 hari lalu'),
-                    _buildActivityItem('🌅 Lari pagi', '4.8 km – 35 menit', const Color(0xFF1E3A8A), '7 hari lalu'),
+
                   ],
                 ),
               ),
@@ -124,8 +119,8 @@ class AktivitasPage extends StatelessWidget {
             ),
           ),
 
-          // ikon next — cuma dekor
-          const Icon(Icons.chevron_right, color: Colors.grey),
+          // // ikon next — cuma dekor
+          // const Icon(Icons.chevron_right, color: Colors.grey),
         ],
       ),
     );

@@ -45,5 +45,15 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	
+	<!-- Google Maps API Key -->
+	<key>GMSApiKey</key>
+	<string>AIzaSyD0SAMPLEAPIKEY-REPLACEWITHREALKEY</string>
+
+	<!-- Location Usage Description -->
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Memerlukan akses lokasi saat aplikasi digunakan untuk pelacakan lari</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Memerlukan akses lokasi secara terus menerus untuk pelacakan yang akurat</string>
 </dict>
 </plist>

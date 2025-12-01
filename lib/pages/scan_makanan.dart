@@ -15,15 +15,15 @@ class ScanMakananTab extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        actions: [
-          // Tombol settings di kanan
-          IconButton(
-            icon: const Icon(Icons.settings_outlined, color: Color(0xFF1E3A8A)),
-            onPressed: () {},
-          ),
-        ],
-        backgroundColor: Colors.white,
-        elevation: 1, // bayangan tipis agar terlihat clean
+        // actions: [
+        //   // Tombol settings di kanan
+        //   IconButton(
+        //     icon: const Icon(Icons.settings_outlined, color: Color(0xFF1E3A8A)),
+        //     onPressed: () {},
+        //   ),
+        // ],
+        // backgroundColor: Colors.white,
+        // elevation: 1, // bayangan tipis agar terlihat clean
       ),
 
       // Isi halaman bisa di-scroll
