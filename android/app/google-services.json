@@ -6,17 +6,7 @@
   },
   "client": [
     {
-      "client_info": {
-        "mobilesdk_app_id": "1:855557608148:android:373146c91e756451b4a141",
-        "android_client_info": {
-          "package_name": "com.example.lariin"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyB8HG5WekOQGsNbjfCcEQ66eLxreONvU6o"
-        }
+
       ],
       "services": {
         "appinvite_service": {
