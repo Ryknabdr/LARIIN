@@ -50,7 +50,7 @@ class _ChatbotGiziTabState extends State<ChatbotGiziTab> {
       // AppBar chatbot
       appBar: AppBar(
         title: const Text(
-          'Chatbot Gizi',
+          'Chatbot',
           style: TextStyle(
             color: Color(0xFF1E3A8A),
             fontWeight: FontWeight.bold,

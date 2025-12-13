@@ -31,6 +31,7 @@ dependencies:
   flutter:
     sdk: flutter
   geolocator: ^12.0.0
+  google_sign_in: ^6.1.5
   http: ^1.1.0
 
 
@@ -44,6 +45,7 @@ dependencies:
   location: ^6.0.1
   shared_preferences: ^2.2.2
   carousel_slider: ^5.1.1
+  icons_plus: ^5.0.0
 
 dev_dependencies:
   flutter_test:
